@@ -65,6 +65,7 @@ public class Lexico {
         int estado = 0;
         
         StringBuffer lexema = new StringBuffer();
+        String verificaPalavraReservada = "";
         while(this.hasNextChar()){
             c = this.nextChar();            
             switch(estado){
@@ -74,6 +75,7 @@ public class Lexico {
                     }
                     else if(this.isLetra(c)){
                         lexema.append(c);
+                        verificaPalavraReservada+=c;
                         estado = 1;
                     }
                     else if(this.isDigito(c)){
@@ -115,10 +117,20 @@ public class Lexico {
                 case 1:
                     if(this.isLetra(c) || this.isDigito(c)){
                         lexema.append(c);
+                        verificaPalavraReservada+=c;
                         estado = 1;                        
                     }else{
                         this.back();
-                        return new Token(lexema.toString(), Token.TIPO_IDENTIFICADOR);                        
+                        if(verificaPalavraReservada.compareTo("int") == 0 || verificaPalavraReservada.compareTo("float") == 0 ||
+                        verificaPalavraReservada.compareTo("char") == 0 || verificaPalavraReservada.compareTo("while") == 0 ||
+                        verificaPalavraReservada.compareTo("main") == 0 || verificaPalavraReservada.compareTo("if") == 0 ||
+                        verificaPalavraReservada.compareTo("else") == 0){
+                            return new Token(lexema.toString(), Token.TIPO_PALAVRA_RESERVADA);    
+                        } else{
+                            verificaPalavraReservada="";
+                            return new Token(lexema.toString(), Token.TIPO_IDENTIFICADOR);  
+                        }
+                      
                     }
                     break;
                 case 2:

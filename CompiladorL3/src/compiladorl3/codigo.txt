@@ -13,6 +13,10 @@ n123
 +
 'n'
 
+int
+while
+char
+
 >
 ==
 <=
